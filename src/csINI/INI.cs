@@ -53,7 +53,7 @@ namespace csINI
             }
         }
 
-        public INI() { }
+        public INI() : this(true) { }
 
         internal bool InitLog(bool failSilently, Assembly csLogPass, Type csLogTypePass, object csLogInstancePass)
         {

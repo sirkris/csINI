@@ -6,6 +6,15 @@ using System.Reflection;
 
 namespace csINITest
 {
+    /*
+     * Logging Note:
+     * 
+     * To test integration with the optional csLog library, simply place a copy of csLog.dll 
+     * into the same directory as the test executable.  If a logs subdirectory appears after 
+     * execution, it worked.
+     * 
+     * --Kris
+     */
     class csINITest
     {
         public static string basedir = Environment.CurrentDirectory + @"\..\";
