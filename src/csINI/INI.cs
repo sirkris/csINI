@@ -10,26 +10,32 @@ namespace csINI
 {
     public class INI
     {
+        public static string LibName = "csINI";
+        public static string Version = "1.00";
+        public static string Author = "Kris Craig";
+        public static string Email = "kriscraig@php.net";
+        public static string Repo = "https://github.com/sirkris/csINI";
+
         /*
-         * Note on logging:
-         * 
-         * The csLog library is OPTIONAL and not included in this repo.
-         * It is recommended as it enables the INI library to generate useful logs.
-         * 
-         * If you do NOT want to use the csLog library, pass false for the logging 
-         * argument when instantiating the INI class.  If you want to use an existing 
-         * instance of the csLog class, simply pass the Assembly, Type, and instance 
-         * variables when instantiating the INI class.
-         * 
-         * If the csLog library is not present or fails to load during instantiation, 
-         * a caught Exception will occur.  Because csLog is not critical to the INI 
-         * library's successful operation, the default behavior is for the Exception 
-         * to be ignored.  You can change this by passing false for the failSilently 
-         * argument when instantiating the INI class.  That will cause the Exception 
-         * to be thrown normally.
-         * 
-         * --Kris
-         */
+          * Note on logging:
+          * 
+          * The csLog library is OPTIONAL and not included in this repo.
+          * It is recommended as it enables the INI library to generate useful logs.
+          * 
+          * If you do NOT want to use the csLog library, pass false for the logging 
+          * argument when instantiating the INI class.  If you want to use an existing 
+          * instance of the csLog class, simply pass the Assembly, Type, and instance 
+          * variables when instantiating the INI class.
+          * 
+          * If the csLog library is not present or fails to load during instantiation, 
+          * a caught Exception will occur.  Because csLog is not critical to the INI 
+          * library's successful operation, the default behavior is for the Exception 
+          * to be ignored.  You can change this by passing false for the failSilently 
+          * argument when instantiating the INI class.  That will cause the Exception 
+          * to be thrown normally.
+          * 
+          * --Kris
+          */
         protected const string Logname = "INI";
         protected string logLibDir = Environment.CurrentDirectory;
 
@@ -47,7 +53,9 @@ namespace csINI
             }
         }
 
-        public bool InitLog(bool failSilently, Assembly csLogPass, Type csLogTypePass, object csLogInstancePass)
+        public INI() { }
+
+        internal bool InitLog(bool failSilently, Assembly csLogPass, Type csLogTypePass, object csLogInstancePass)
         {
             if (csLogPass == null)
             {
@@ -142,7 +150,7 @@ namespace csINI
         }
 
         /* Interact with the log handler.  --Kris */
-        protected void Log(string text = null, string action = "append", bool newline = true)
+        internal void Log(string text = null, string action = "append", bool newline = true)
         {
             if (csLogEnabled == true)
             {
@@ -217,7 +225,7 @@ namespace csINI
 
         /* Parse the INI string into key => value pairs.  --Kris */
         // Note - Ignores section headers by default!
-        public string[][] Parse(string filedata, bool useheaders = false)
+        internal string[][] Parse(string filedata, bool useheaders = false)
         {
             string[][] directives = new string[99999][];
             string[] lines = new string[99999];
@@ -246,7 +254,7 @@ namespace csINI
                 if (lineclean.IndexOf("=") != -1)
                 {
                     directives[i] = new string[2];
-                    directives[i] = Regex.Split(lineclean, @"[ ]*(?!\\)=[ ]*");
+                    directives[i] = Regex.Split(lineclean, @"[ ]*(?<!(?<!\\)*\\)\=[ ]*");
 
                     i++;
                 }
@@ -266,7 +274,7 @@ namespace csINI
         }
 
         /* Parse the key => value pairs into a sanitized dictionary.  --Kris */
-        public Dictionary<string, string> GetDirectives(string[][] lines)
+        internal Dictionary<string, string> GetDirectives(string[][] lines)
         {
             Dictionary<string, string> directives = new Dictionary<string, string>();
 
@@ -284,7 +292,7 @@ namespace csINI
         }
 
         /* Parse the key => value pairs into a sanitized dictionary that includes INI section headers.  --Kris */
-        public Dictionary<string, Dictionary<string, string>> GetDirectivesWithHeaders(string[][] lines)
+        internal Dictionary<string, Dictionary<string, string>> GetDirectivesWithHeaders(string[][] lines)
         {
             Dictionary<string, Dictionary<string, string>> directives = new Dictionary<string, Dictionary<string, string>>();
 
@@ -587,7 +595,7 @@ namespace csINI
 
         /* So we can get accurate line numbers, including comments/etc.  --Kris */
         // TODO - Merge these rules with Parse?
-        public Dictionary<int, int> LineModifiers(string filedata)
+        internal Dictionary<int, int> LineModifiers(string filedata)
         {
             Dictionary<int, int> linemod = new Dictionary<int, int>();
 
@@ -628,7 +636,7 @@ namespace csINI
 
         /* Convert variables into literal strings.  --Kris */
         // TODO - Support for user-defined variables.
-        public string ParseVars(string text)
+        internal string ParseVars(string text)
         {
             Match m;
             Match mm;
@@ -667,7 +675,7 @@ namespace csINI
             return text;
         }
 
-        public void LineFail(string command, string value, Dictionary<int, int> linemod, int line, string errmsg = null, string filename = null)
+        internal void LineFail(string command, string value, Dictionary<int, int> linemod, int line, string errmsg = null, string filename = null)
         {
             Log("**** FATAL ERROR DETECTED! ****");
             if (errmsg != null)
@@ -682,7 +690,7 @@ namespace csINI
             Log("INI Parse Aborted!");
         }
 
-        public void LineWarning(string command, string value, Dictionary<int, int> linemod, int line, string errmsg = null, string filename = null)
+        internal void LineWarning(string command, string value, Dictionary<int, int> linemod, int line, string errmsg = null, string filename = null)
         {
             Log("Warning:");
             if (errmsg != null)
