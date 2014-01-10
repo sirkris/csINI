@@ -11,7 +11,7 @@ namespace csINI
     public class INI
     {
         public static string LibName = "csINI";
-        public static string Version = "1.00";
+        public static string Version = "1.10";
         public static string Author = "Kris Craig";
         public static string Email = "kriscraig@php.net";
         public static string Repo = "https://github.com/sirkris/csINI";
@@ -250,7 +250,7 @@ namespace csINI
                     lineclean = dump[0];
                 }
 
-                /* If it doesn't have assignment, skip to the next line.  --Kris */
+                /* Check for assignment.  --Kris */
                 if (lineclean.IndexOf("=") != -1)
                 {
                     directives[i] = new string[2];
@@ -258,6 +258,7 @@ namespace csINI
 
                     i++;
                 }
+                /* Parse section header.  --Kris */
                 else if (useheaders == true
                     && lineclean.IndexOf(@"[") == 0
                     && lineclean.LastIndexOf(@"]") > lineclean.IndexOf(@"["))
@@ -267,6 +268,11 @@ namespace csINI
                     directives[i][1] = lineclean.Substring(lineclean.IndexOf(@"[") + 1, lineclean.LastIndexOf(@"]") - lineclean.IndexOf("[") - 1);
 
                     i++;
+                }
+                /* All else fails, assume the previous directive was multiline and append.  --Kris */
+                else if (i > 0 && lineclean.Trim() != "")
+                {
+                    directives[i - 1][1] += Environment.NewLine + lineclean.Trim();
                 }
             }
 
