@@ -1,0 +1,15 @@
+csINI - TODO List
+------------------
+
+[X] Multi-line support
+[ ] Parse shit like \r\n on unquoted directives.
+[ ] Double quotes to treat directives as literal strings.
+[ ] Support for environment variables using ${VAR} syntax.
+[ ] Handle non-string types, such as parsing true and false as booleans.
+
+
+For more TODO ideas:
+
+http://en.wikipedia.org/wiki/INI_file
+
+http://docs.services.mozilla.com/server-devguide/confspec.html
